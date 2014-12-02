@@ -32,8 +32,6 @@ function onReady() {
 }
 
 function checkOccupation(occupation) {
-    //console.log(occupation.value);
-
     var occupationOther = document.getElementById('occupationOther');
     if (occupation.value == 'other') {
         occupationOther.style.display = 'block';
@@ -73,16 +71,16 @@ function validateForm(form) {
     for (idx = 0; idx < requiredFields.length; ++idx) {
         valid &= validateRequiredField(form.elements[requiredFields[idx]]);
     }
-    var zipCodeField = form.elements['zip']; //validate zip code field
+    var zipCodeField = form.elements['zip'];
     var zipRegExp = new RegExp('^\\d{5}$');
-    if(!zipRegExp.test(zipField.value)) {
+    if(!zipRegExp.test(zipCodeField.value)) {
         valid = false;
-        zipField.className = 'form-control invalid-form';
+        zipCodeField.className = 'form-control invalid-form';
     }
-    var birthday = form.elements['birthdate']; //validates birthdate
+    var birthday = form.elements['birthdate'];
     var birthdayError = document.getElementById('birthdateMessage');
     var age = calculateAge(birthday.value);
-    if(age < 13) { //checks if user is greater than 13 by calculated age
+    if(age < 13) {
         valid = false;
         birthday.className = 'form-control invalid-form';
         birthdayError.style.display = 'block';
@@ -99,14 +97,8 @@ function validateRequiredField(field) {
     var valid = value.length > 0;
     var zipRegExp = new RegExp('^\\d{5}$');
 
-    if (field.name == 'zip') { //checks field if zip is 5 num.
+    if (field.name == 'zip') {
         valid &= zipRegExp.test(value);
-    }
-    if (field.name == 'birthdate') { //sees if birthdate is a num.
-        var test = value.replace(/\//g,''); //removes slashes
-        test = !isNaN(test);
-        valid &= test;
-        console.log(test);
     }
 
     if (valid) {
@@ -118,10 +110,10 @@ function validateRequiredField(field) {
     return valid;
 }
 
-function calculateAge(birthDate) { //calculates the age of user using birth date
+function calculateAge(birthDate) {
     birthDate = new Date(birthDate);
     var today = new Date();
-    var yearsDiff = today.getFullYear() - birthDate.getUTCFullYear(); //uses current date to calc. age
+    var yearsDiff = today.getFullYear() - birthDate.getUTCFullYear();
     var monthsDiff = today.getMonth() - dob.getUTCMonth();
     var daysDiff = today.getDate() - dob.getUTCDate();
 
