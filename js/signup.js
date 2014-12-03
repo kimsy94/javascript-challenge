@@ -57,9 +57,11 @@ function onSubmit(evt) {
         }
 
         evt.returnValue = valid;
-        return valid;
     } catch (exception) {
-
+        evt.returnValue = false;
+        if (evt.preventDefault) {
+            evt.preventDefault();
+        }
     }
 }
 
@@ -75,14 +77,14 @@ function validateForm(form) {
     var zipRegExp = new RegExp('^\\d{5}$');
     if(!zipRegExp.test(zipCodeField.value)) {
         valid = false;
-        zipCodeField.className = 'form-control invalid-form';
+        zipCodeField.className = 'form-control invalid-field';
     }
     var birthday = form.elements['birthdate'];
     var birthdayError = document.getElementById('birthdateMessage');
-    var age = calculateAge(birthday.value);
+    var age = calculateAge(birthday);
     if(age < 13) {
         valid = false;
-        birthday.className = 'form-control invalid-form';
+        birthday.className = 'form-control invalid-field';
         birthdayError.style.display = 'block';
     }
     else {
@@ -95,11 +97,6 @@ function validateRequiredField(field) {
     var value = field.value;
     value = value.trim();
     var valid = value.length > 0;
-    var zipRegExp = new RegExp('^\\d{5}$');
-
-    if (field.name == 'zip') {
-        valid &= zipRegExp.test(value);
-    }
 
     if (valid) {
         field.className = 'form-control';
@@ -110,12 +107,12 @@ function validateRequiredField(field) {
     return valid;
 }
 
-function calculateAge(birthDate) {
-    birthDate = new Date(birthDate);
+function calculateAge(input) {
+    var birthDate = new Date(input.value);
     var today = new Date();
     var yearsDiff = today.getFullYear() - birthDate.getUTCFullYear();
-    var monthsDiff = today.getMonth() - dob.getUTCMonth();
-    var daysDiff = today.getDate() - dob.getUTCDate();
+    var monthsDiff = today.getMonth() - birthDate.getUTCMonth();
+    var daysDiff = today.getDate() - birthDate.getUTCDate();
 
     if (monthsDiff < 0 || (0 == monthsDiff && daysDiff < 0)) {
         yearsDiff--;
